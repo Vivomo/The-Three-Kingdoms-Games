@@ -1,0 +1,43 @@
+$margin: 100px;
+
+.battle-map {
+    position: relative;
+    height: $margin * 6;
+
+    .battle-map-line {
+        position: absolute;
+    }
+
+    .row-line-wrap {
+
+    }
+
+    .row-line-wrap {
+
+        .battle-map-line {
+            width: 100%;
+            border-top: 1px solid #000;
+        }
+
+        @for $i from 1 through 5 {
+            .battle-map-line:nth-child(#{$i}) {
+                top: $margin * $i;
+            }
+        }
+    }
+
+    .col-line-wrap {
+
+        .battle-map-line {
+            height: 100%;
+            border-left: 1px solid #000;
+
+        }
+
+        @for $i from 1 through 3 {
+            .battle-map-line:nth-child(#{$i}) {
+                left: $margin * $i;
+            }
+        }
+    }
+}
