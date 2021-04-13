@@ -2,7 +2,9 @@ $margin: 100px;
 
 .battle-map {
     position: relative;
+    margin: 5px;
     height: $margin * 6;
+    border: 1px solid #000;
 
     .battle-map-line {
         position: absolute;
