@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {DragEvent} from 'react';
 
 import './style.scss';
 
@@ -8,22 +8,29 @@ interface IProps {
 }
 
 const BattleMap = ({width = 4, height = 6}: IProps) => {
+
+    const onDragOver = (e: DragEvent) => {
+        // console.log(e);
+        e.nativeEvent.preventDefault();
+    }
+
     return (
         <div className="battle-map">
-            <div className="row-line-wrap line-wrap">
-            {
-                Array(height - 1).fill(0).map((_, index) => {
-                    return <div className="battle-map-line" key={`r${index}`}/>
-                })
-            }
-            </div>
-            <div className="col-line-wrap line-wrap">
-            {
-                Array(width - 1).fill(0).map((_, index) => {
-                    return <div className="battle-map-line" key={`c${index}`}/>
-                })
-            }
-            </div>
+            <table >
+                <tbody>
+                {
+                    Array(height).fill(0).map((_, trIndex) => {
+                        return <tr key={trIndex}>
+                            {
+                                Array(width).fill(0).map((_, tdIndex) =>
+                                    <td key={tdIndex} className="battle-cell" onDragOver={onDragOver}/>
+                                )
+                            }
+                        </tr>
+                    })
+                }
+                </tbody>
+            </table>
         </div>
     );
 };

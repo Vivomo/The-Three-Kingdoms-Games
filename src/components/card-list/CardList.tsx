@@ -18,7 +18,7 @@ const CardList = ({data}: IProps) => {
     return (
         <div className="card-list-wrap">
             {
-                data.map(item => <Card {...item}/>)
+                data.map(item => <Card key={item.id} {...item}/>)
             }
         </div>
     );
