@@ -14,6 +14,10 @@ const BattleMap = ({width = 4, height = 6}: IProps) => {
         e.nativeEvent.preventDefault();
     }
 
+    const onDrop = (e: DragEvent) => {
+        console.log(e)
+    }
+
     return (
         <div className="battle-map">
             <table >
@@ -23,7 +27,7 @@ const BattleMap = ({width = 4, height = 6}: IProps) => {
                         return <tr key={trIndex}>
                             {
                                 Array(width).fill(0).map((_, tdIndex) =>
-                                    <td key={tdIndex} className="battle-cell" onDragOver={onDragOver}/>
+                                    <td key={tdIndex} className="battle-cell" onDrop={onDrop} onDragOver={onDragOver}/>
                                 )
                             }
                         </tr>
