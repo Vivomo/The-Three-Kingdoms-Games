@@ -2,6 +2,8 @@ import React, {DragEvent, useContext} from 'react';
 
 import './style.scss';
 import GameCtx from '../../context';
+import Card from '../card';
+import {MapPoints} from '../../constant';
 
 interface IProps {
     width?: number;
@@ -16,11 +18,16 @@ const BattleMap = ({width = 4, height = 6}: IProps) => {
         e.nativeEvent.preventDefault();
     }
 
-    const onDrop = (trIndex: number, tdIndex: number) => {
-        if (ctx.round === 'beforeBlueAttack' && trIndex > 2) {
-            console.log(ctx.draggingId, trIndex, tdIndex);
-        } else if (ctx.round === 'beforeRedAttack' && trIndex < 3) {
-            console.log(ctx.draggingId, trIndex, tdIndex);
+    const onDrop = (row: number, col: number) => {
+        if (ctx.mapDetail[row][col] !== null) {
+            console.log('位置无效');
+        }
+        if (ctx.round === 'beforeBlueAttack' && row > 2) {
+            ctx.setMapPointDetail(row, col)
+            console.log(ctx.draggingId, row, col);
+        } else if (ctx.round === 'beforeRedAttack' && row < 3) {
+            console.log(ctx.draggingId, row, col);
+            ctx.setMapPointDetail(row, col);
         } else {
             console.log('位置无效');
         }
@@ -31,10 +38,10 @@ const BattleMap = ({width = 4, height = 6}: IProps) => {
             <table >
                 <tbody>
                 {
-                    Array(height).fill(0).map((_, trIndex) => {
+                    MapPoints.map((row, trIndex) => {
                         return <tr key={trIndex}>
                             {
-                                Array(width).fill(0).map((_, tdIndex) =>
+                                row.map((_, tdIndex) =>
                                     <td
                                         key={tdIndex}
                                         className="battle-cell"
@@ -42,7 +49,13 @@ const BattleMap = ({width = 4, height = 6}: IProps) => {
                                         onDrop={() => {
                                             onDrop(trIndex, tdIndex);
                                         }}
-                                    />
+                                    >
+                                        {
+                                            ctx.mapDetail[trIndex][tdIndex] &&
+                                                // @ts-ignore
+                                                <Card {...ctx.mapDetail[trIndex][tdIndex]}/>
+                                        }
+                                    </td>
                                 )
                             }
                         </tr>

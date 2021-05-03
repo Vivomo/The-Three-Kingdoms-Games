@@ -5,48 +5,32 @@ import City from '../city';
 import CardList from '../card-list';
 import {CardProps} from '../card';
 import './style.scss';
-import {ROUND, RoundRecord} from '../../typings';
-import GameCtx, {ICtx} from '../../context';
+import {ROUND} from '../../typings';
+import GameCtx, {defaultCtx, MapRow} from '../../context';
+import {RoundLoop} from '../../constant';
 
 
 const Battleground = () => {
 
-    const [myCard, setMyCard] = useState<CardProps[]>([]);
-    const [enemyCard, setEnemyCard] = useState<CardProps[]>([]);
+    const [blueCard, setBlueCard] = useState<CardProps[]>([]);
+    const [redCard, setRedCard] = useState<CardProps[]>([]);
+    const [draggingId, setDraggingId] = useState(0);
+    const [round, setRound] = useState<ROUND>('init');
+    const [mapDetail, setMapDetail] = useState<MapRow[]>(defaultCtx.mapDetail)
 
-    const [ctxData, setCtxData] = useState<ICtx>({
-        round: 'init',
-        draggingId: 0,
-        setDraggingId: (id) => {
-            setCtxData({
-                ...ctxData,
-                draggingId: id,
-            })
-        }
-    })
+    const setMapPointDetail = (row: number, col: number) => {
 
-    const roundLoop: RoundRecord = {
-        init: {
-            next: 'beforeBlueAttack'
-        },
-        beforeBlueAttack: {
-            next: 'blueAttacking'
-        },
-        blueAttacking: {
-            next: 'afterBlueAttack'
-        },
-        afterBlueAttack: {
-            next: 'beforeRedAttack'
-        },
-        beforeRedAttack: {
-            next: 'redAttacking'
-        },
-        redAttacking: {
-            next: 'afterRedAttack'
-        },
-        afterRedAttack: {
-            next: 'beforeBlueAttack'
+        const list = round === 'beforeBlueAttack' ? blueCard : redCard;
+        const index = list.findIndex(item => item.id === draggingId);
+        const card = list[index] || null;
+        list.splice(index, 1);
+        mapDetail[row][col] = card;
+        if (round === 'beforeBlueAttack') {
+            setBlueCard([...list]);
+        } else {
+            setRedCard([...list]);
         }
+        setMapDetail([...mapDetail])
     }
 
     const creatRandomCard = (num: number): CardProps[] => {
@@ -61,11 +45,7 @@ const Battleground = () => {
     }
 
     const nextRound = () => {
-        let nextRound = roundLoop[ctxData.round].next;
-        setCtxData({
-            ...ctxData,
-            round: nextRound
-        })
+        setRound(RoundLoop[round].next)
     }
 
     const execRound = (round: ROUND) => {
@@ -73,19 +53,19 @@ const Battleground = () => {
             case 'init':
                 console.log('游戏开始');
                 nextRound();
-            break;
+                break;
             default:
         }
     };
 
 
     const startGame = () => {
-        execRound(ctxData.round);
+        execRound(round);
     }
 
     const init = () => {
-        setMyCard(creatRandomCard(4));
-        setEnemyCard(creatRandomCard(4));
+        setBlueCard(creatRandomCard(4));
+        setRedCard(creatRandomCard(4));
         startGame();
     };
 
@@ -94,16 +74,23 @@ const Battleground = () => {
     }, []);
 
     useEffect(() => {
-        execRound(ctxData.round);
-    }, [ctxData.round])
+        execRound(round);
+    }, [round])
+
 
     return (
         <div className="battleground">
-            <GameCtx.Provider value={ctxData}>
+            <GameCtx.Provider value={{
+                draggingId,
+                setDraggingId,
+                round,
+                mapDetail,
+                setMapPointDetail
+            }}>
                 <City/>
-                <CardList data={enemyCard} side="red"/>
+                <CardList data={redCard} side="red"/>
                 <BattleMap/>
-                <CardList data={myCard} side="blue"/>
+                <CardList data={blueCard} side="blue"/>
                 <City/>
             </GameCtx.Provider>
         </div>
