@@ -1,6 +1,7 @@
-import React, {DragEvent} from 'react';
+import React, {DragEvent, useContext} from 'react';
 
 import './style.scss';
+import GameCtx from '../../context';
 
 interface IProps {
     width?: number;
@@ -9,13 +10,20 @@ interface IProps {
 
 const BattleMap = ({width = 4, height = 6}: IProps) => {
 
+    const ctx = useContext(GameCtx);
+
     const onDragOver = (e: DragEvent) => {
-        // console.log(e);
         e.nativeEvent.preventDefault();
     }
 
-    const onDrop = (e: DragEvent) => {
-        console.log(e)
+    const onDrop = (trIndex: number, tdIndex: number) => {
+        if (ctx.round === 'beforeBlueAttack' && trIndex > 2) {
+            console.log(ctx.draggingId, trIndex, tdIndex);
+        } else if (ctx.round === 'beforeRedAttack' && trIndex < 3) {
+            console.log(ctx.draggingId, trIndex, tdIndex);
+        } else {
+            console.log('位置无效');
+        }
     }
 
     return (
@@ -27,7 +35,14 @@ const BattleMap = ({width = 4, height = 6}: IProps) => {
                         return <tr key={trIndex}>
                             {
                                 Array(width).fill(0).map((_, tdIndex) =>
-                                    <td key={tdIndex} className="battle-cell" onDrop={onDrop} onDragOver={onDragOver}/>
+                                    <td
+                                        key={tdIndex}
+                                        className="battle-cell"
+                                        onDragOver={onDragOver}
+                                        onDrop={() => {
+                                            onDrop(trIndex, tdIndex);
+                                        }}
+                                    />
                                 )
                             }
                         </tr>

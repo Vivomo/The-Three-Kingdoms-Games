@@ -12,7 +12,6 @@ interface IProps {
 const CardList = ({data, side}: IProps) => {
 
     const ctx = useContext(GameCtx);
-    console.log(ctx);
 
     const draggable = (side === 'blue' && ctx.round === 'beforeBlueAttack') ||
                       (side === 'red' && ctx.round === 'beforeRedAttack');

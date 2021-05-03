@@ -14,9 +14,15 @@ const Battleground = () => {
     const [myCard, setMyCard] = useState<CardProps[]>([]);
     const [enemyCard, setEnemyCard] = useState<CardProps[]>([]);
 
-    // const ctx = useContext(GameCtx);
     const [ctxData, setCtxData] = useState<ICtx>({
-        round: 'init'
+        round: 'init',
+        draggingId: 0,
+        setDraggingId: (id) => {
+            setCtxData({
+                ...ctxData,
+                draggingId: id,
+            })
+        }
     })
 
     const roundLoop: RoundRecord = {
@@ -57,6 +63,7 @@ const Battleground = () => {
     const nextRound = () => {
         let nextRound = roundLoop[ctxData.round].next;
         setCtxData({
+            ...ctxData,
             round: nextRound
         })
     }
