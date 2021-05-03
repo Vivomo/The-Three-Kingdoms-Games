@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 
 import BattleMap from '../battle-map';
 import City from '../city';
@@ -6,6 +6,8 @@ import CardList from '../card-list';
 import {CardProps} from '../card';
 import './style.scss';
 import {ROUND, RoundRecord} from '../../typings';
+import GameCtx, {ICtx} from '../../context';
+
 
 const Battleground = () => {
 
@@ -13,7 +15,15 @@ const Battleground = () => {
     const [enemyCard, setEnemyCard] = useState<CardProps[]>([]);
     const [round, setRound] = useState<ROUND>('beforeBlueAttack');
 
+    // const ctx = useContext(GameCtx);
+    const [ctxData, setCtxData] = useState<ICtx>({
+        round: 'init'
+    })
+
     const roundLoop: RoundRecord = {
+        init: {
+            next: 'beforeBlueAttack'
+        },
         beforeBlueAttack: {
             next: 'blueAttacking'
         },
@@ -70,11 +80,13 @@ const Battleground = () => {
 
     return (
         <div className="battleground">
-            <City/>
-            <CardList data={enemyCard} side="red"/>
-            <BattleMap/>
-            <CardList data={myCard} side="blue"/>
-            <City/>
+            <GameCtx.Provider value={ctxData}>
+                <City/>
+                <CardList data={enemyCard} side="red"/>
+                <BattleMap/>
+                <CardList data={myCard} side="blue"/>
+                <City/>
+            </GameCtx.Provider>
         </div>
     );
 };

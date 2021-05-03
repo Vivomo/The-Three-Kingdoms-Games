@@ -3,4 +3,5 @@ export interface CardProps {
     attack?: number;
     HP?: number;
     id: number;
+    draggable?: boolean;
 }
