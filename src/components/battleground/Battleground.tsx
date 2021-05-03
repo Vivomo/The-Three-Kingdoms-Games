@@ -13,7 +13,6 @@ const Battleground = () => {
 
     const [myCard, setMyCard] = useState<CardProps[]>([]);
     const [enemyCard, setEnemyCard] = useState<CardProps[]>([]);
-    const [round, setRound] = useState<ROUND>('beforeBlueAttack');
 
     // const ctx = useContext(GameCtx);
     const [ctxData, setCtxData] = useState<ICtx>({
@@ -56,27 +55,40 @@ const Battleground = () => {
     }
 
     const nextRound = () => {
-        switch (round) {
-            case 'afterBlueAttack':
-                break;
-        }
+        let nextRound = roundLoop[ctxData.round].next;
+        setCtxData({
+            round: nextRound
+        })
     }
 
+    const execRound = (round: ROUND) => {
+        switch (round) {
+            case 'init':
+                console.log('游戏开始');
+                nextRound();
+            break;
+            default:
+        }
+    };
+
+
     const startGame = () => {
-        nextRound();
+        execRound(ctxData.round);
     }
 
     const init = () => {
         setMyCard(creatRandomCard(4));
         setEnemyCard(creatRandomCard(4));
-        setRound('beforeBlueAttack');
-
         startGame();
     };
 
     useEffect(() => {
         init();
     }, []);
+
+    useEffect(() => {
+        execRound(ctxData.round);
+    }, [ctxData.round])
 
     return (
         <div className="battleground">
