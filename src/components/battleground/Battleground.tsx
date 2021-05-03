@@ -11,26 +11,26 @@ const Battleground = () => {
 
     const [myCard, setMyCard] = useState<CardProps[]>([]);
     const [enemyCard, setEnemyCard] = useState<CardProps[]>([]);
-    const [round, setRound] = useState<ROUND>('beforeLeftAttack');
+    const [round, setRound] = useState<ROUND>('beforeBlueAttack');
 
-    const roundLoop:RoundRecord = {
-        beforeLeftAttack: {
-            next: 'leftAttacking'
+    const roundLoop: RoundRecord = {
+        beforeBlueAttack: {
+            next: 'blueAttacking'
         },
-        leftAttacking: {
-            next: 'afterLeftAttack'
+        blueAttacking: {
+            next: 'afterBlueAttack'
         },
-        afterLeftAttack: {
-            next: 'beforeRightAttack'
+        afterBlueAttack: {
+            next: 'beforeRedAttack'
         },
-        beforeRightAttack: {
-            next: 'rightAttacking'
+        beforeRedAttack: {
+            next: 'redAttacking'
         },
-        rightAttacking: {
-            next: 'afterRightAttack'
+        redAttacking: {
+            next: 'afterRedAttack'
         },
-        afterRightAttack: {
-            next: 'beforeLeftAttack'
+        afterRedAttack: {
+            next: 'beforeBlueAttack'
         }
     }
 
@@ -47,7 +47,7 @@ const Battleground = () => {
 
     const nextRound = () => {
         switch (round) {
-            case 'afterLeftAttack':
+            case 'afterBlueAttack':
                 break;
         }
     }
@@ -59,7 +59,7 @@ const Battleground = () => {
     const init = () => {
         setMyCard(creatRandomCard(4));
         setEnemyCard(creatRandomCard(4));
-        setRound('beforeLeftAttack');
+        setRound('beforeBlueAttack');
 
         startGame();
     };
@@ -71,9 +71,9 @@ const Battleground = () => {
     return (
         <div className="battleground">
             <City/>
-            <CardList data={enemyCard}/>
+            <CardList data={enemyCard} side="red"/>
             <BattleMap/>
-            <CardList data={myCard}/>
+            <CardList data={myCard} side="blue"/>
             <City/>
         </div>
     );

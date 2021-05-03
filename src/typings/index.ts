@@ -1,4 +1,4 @@
-export type ROUND = 'leftAttacking' | 'afterLeftAttack' | 'beforeRightAttack' | 'rightAttacking' | 'afterRightAttack' | 'beforeLeftAttack';
+export type ROUND = 'blueAttacking' | 'afterBlueAttack' | 'beforeRedAttack' | 'redAttacking' | 'afterRedAttack' | 'beforeBlueAttack';
 
 interface RoundValue {
     next: ROUND;

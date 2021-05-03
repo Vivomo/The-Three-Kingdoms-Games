@@ -5,6 +5,7 @@ import './style.scss';
 
 interface IProps {
     data: CardProps[];
+    side: 'blue' | 'red';
 }
 
 const CardList = ({data}: IProps) => {
