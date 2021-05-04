@@ -1,11 +1,11 @@
 import React, {useContext, useEffect} from 'react';
 
-import Card, {CardProps} from '../card';
+import Card, {ICard} from '../card';
 import './style.scss';
 import GameCtx from '../../context';
 
 interface IProps {
-    data: CardProps[];
+    data: ICard[];
     side: 'blue' | 'red';
 }
 

@@ -1,8 +1,8 @@
 import React from 'react';
 import {ROUND} from '../typings';
-import {CardProps} from '../components/card';
+import {ICard} from '../components/card';
 
-type mapPoint = CardProps | null;
+type mapPoint = ICard | null;
 export type MapRow = mapPoint[];
 
 export interface ICtx {

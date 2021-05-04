@@ -12,7 +12,7 @@ const City = ({name = '主城', HP = 300}: IProps) => {
     return (
         <div className="battle-city">
             <div>{name}</div>
-            <div>HP: {HP}</div>
+            <div>❤️{HP}</div>
         </div>
     );
 };

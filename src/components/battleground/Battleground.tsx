@@ -3,7 +3,7 @@ import React, {useState, useEffect, useContext} from 'react';
 import BattleMap from '../battle-map';
 import City from '../city';
 import CardList from '../card-list';
-import {CardProps} from '../card';
+import {ICard} from '../card';
 import './style.scss';
 import {ROUND} from '../../typings';
 import GameCtx, {defaultCtx, MapRow} from '../../context';
@@ -12,14 +12,13 @@ import {RoundLoop} from '../../constant';
 
 const Battleground = () => {
 
-    const [blueCard, setBlueCard] = useState<CardProps[]>([]);
-    const [redCard, setRedCard] = useState<CardProps[]>([]);
+    const [blueCard, setBlueCard] = useState<ICard[]>([]);
+    const [redCard, setRedCard] = useState<ICard[]>([]);
     const [draggingId, setDraggingId] = useState(0);
     const [round, setRound] = useState<ROUND>('init');
     const [mapDetail, setMapDetail] = useState<MapRow[]>(defaultCtx.mapDetail)
 
     const setMapPointDetail = (row: number, col: number) => {
-
         const list = round === 'beforeBlueAttack' ? blueCard : redCard;
         const index = list.findIndex(item => item.id === draggingId);
         const card = list[index] || null;
@@ -33,7 +32,7 @@ const Battleground = () => {
         setMapDetail([...mapDetail])
     }
 
-    const creatRandomCard = (num: number): CardProps[] => {
+    const creatRandomCard = (num: number): ICard[] => {
         return Array(num).fill(0).map(() => {
             return {
                 attack: Math.random() * 10 | 0,
@@ -48,11 +47,17 @@ const Battleground = () => {
         setRound(RoundLoop[round].next)
     }
 
+    const blueAttacking = () => {
+
+    };
+
     const execRound = (round: ROUND) => {
         switch (round) {
             case 'init':
                 console.log('游戏开始');
                 nextRound();
+                break;
+            case 'blueAttacking':
                 break;
             default:
         }
