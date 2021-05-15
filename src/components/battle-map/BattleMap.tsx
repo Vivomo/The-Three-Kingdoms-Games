@@ -25,9 +25,11 @@ const BattleMap = ({width = 4, height = 6}: IProps) => {
         if (ctx.round === 'beforeBlueAttack' && row > 2) {
             ctx.setMapPointDetail(row, col)
             console.log(ctx.draggingId, row, col);
+            ctx.nextRound();
         } else if (ctx.round === 'beforeRedAttack' && row < 3) {
             console.log(ctx.draggingId, row, col);
             ctx.setMapPointDetail(row, col);
+            ctx.nextRound();
         } else {
             console.log('位置无效');
         }

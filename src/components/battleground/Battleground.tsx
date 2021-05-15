@@ -7,7 +7,7 @@ import {ICard} from '../card';
 import './style.scss';
 import {ROUND} from '../../typings';
 import GameCtx, {defaultCtx, MapRow} from '../../context';
-import {RoundLoop} from '../../constant';
+import {RoundLoop, RedAttachList, BlueAttachList} from '../../constant';
 
 
 const Battleground = () => {
@@ -48,16 +48,36 @@ const Battleground = () => {
     }
 
     const blueAttacking = () => {
+        const list = BlueAttachList.flat(1);
 
+        const attack = () => {
+            const coordinate = list.shift();
+            if (coordinate) {
+                const {col, row} = coordinate;
+                const item = mapDetail[row][col];
+                if (item) {
+                    console.log(item, 'attach')
+                } else {
+                    attack();
+                }
+            } else {
+                nextRound();
+            }
+        };
+
+        attack();
     };
 
     const execRound = (round: ROUND) => {
+        console.log('回合', round);
         switch (round) {
             case 'init':
                 console.log('游戏开始');
                 nextRound();
                 break;
             case 'blueAttacking':
+                console.log(' 蓝色方开始攻击');
+                blueAttacking();
                 break;
             default:
         }
@@ -90,6 +110,7 @@ const Battleground = () => {
                 setDraggingId,
                 round,
                 mapDetail,
+                nextRound,
                 setMapPointDetail
             }}>
                 <City/>
